@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+#This bash script displays a list of currently running processes
+trap interrup SIGTERM
+
+interrup()
+{
+    echo "I am invincible!!!"
+}
+
+while true
+do
+    echo "To infinity and beyond"
+    sleep 2
+done
