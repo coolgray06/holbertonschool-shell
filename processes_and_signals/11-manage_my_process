@@ -1,31 +1,35 @@
 #!/usr/bin/env bash
 #This script displays final task
-case "$i" in
-	start)
-		bash manage_my_process &
-		echo $! > /var/run/my_process.pid)"
+if [ "$#" -ne 1 ]
+then
+    echo "Usage: manage_my_process {start|stop|restart}"
+    exit $?
+fi
 
-		;;
+if [ "$1" != "start" ] && [ "$1" != "stop" ] && [ "$1" != "restart" ]
+then
+    echo "Usage: manage_my_process {start|stop|restart}"
+    exit $?
+fi
 
-	stop)
-		kill "$(cat /var/run/my_process.pid)"
-		rm /var/run/my_process.pid
-		echo "manage_my_process stopped"
+if [ "$1" == "start" ]
+then
+    ./manage_my_process &
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process started"
 
-		;;
+elif [ "$1" == "stop" ]
+then
+    kill "$(cat /var/run/my_process.pid)"
+    rm /var/run/my_process.pid
+    echo "manage_my_process stopped"
 
-	restart)
-		kill "$(cat var/run/my_process.pid)"
-		rm /var/run/my_process
-		bash manage_my_process &
-		echo $! > /var/run/my_process.pid
-		echo "manage_my_process restarted"
+elif [ "$1" == "restart" ]
+then
+    kill "$(cat /var/run/my_process.pid)"
+    rm /var/run/my_process.pid
+    ./manage_my_process &
+    echo "$!" > /var/run/my_process.pid
+    echo "manage_my_process restarted"
 
-		;;
-
-	*)
-		echo "Usage: manage_my_process {start|stop|restart}"
-
-		;;
-
-esac
+fi
